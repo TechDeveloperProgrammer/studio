@@ -4,7 +4,7 @@
 /**
  * @fileOverview AI flow for analyzing vocal recordings and providing feedback.
  *
- * - analyzeVocalPerformance - Analyzes vocal recordings for clarity, emotion, and expressiveness.
+ * - analyzeVocalPerformance - Analyzes vocal recordings for clarity, emotion, expressiveness, prosody, and fluency.
  * - AnalyzeVocalPerformanceInput - The input type for the analyzeVocalPerformance function.
  * - AnalyzeVocalPerformanceOutput - The return type for the analyzeVocalPerformance function.
  */
@@ -31,6 +31,12 @@ const AnalyzeVocalPerformanceOutputSchema = z.object({
   expressiveness: z
     .string()
     .describe('An analysis of the expressiveness of the vocal recording.'),
+  prosody: z
+    .string()
+    .describe('An analysis of the prosody (rhythm, stress, intonation) of the vocal recording.'),
+  fluency: z
+    .string()
+    .describe('An analysis of the fluency and smoothness of speech in the vocal recording.'),
   overallFeedback: z.string().describe('Overall feedback to improve vocal performance.'),
 });
 export type AnalyzeVocalPerformanceOutput = z.infer<typeof AnalyzeVocalPerformanceOutputSchema>;
@@ -47,7 +53,7 @@ const prompt = ai.definePrompt({
   output: {schema: AnalyzeVocalPerformanceOutputSchema},
   prompt: `You are an AI vocal coach providing feedback on vocal recordings.
 
-  Analyze the provided vocal recording for clarity, emotion and expressiveness.
+  Analyze the provided vocal recording for clarity, emotion, expressiveness, prosody (rhythm, stress, and intonation), and fluency (smoothness of speech).
 
   Offer overall feedback to improve vocal performance.
 

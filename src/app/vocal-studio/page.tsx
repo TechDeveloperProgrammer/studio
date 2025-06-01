@@ -190,6 +190,8 @@ export default function VocalStudioPage() {
                   <p><strong>Clarity:</strong> {analysisResult.clarity}</p>
                   <p><strong>Emotion:</strong> {analysisResult.emotion}</p>
                   <p><strong>Expressiveness:</strong> {analysisResult.expressiveness}</p>
+                  <p><strong>Prosody:</strong> {analysisResult.prosody}</p>
+                  <p><strong>Fluency:</strong> {analysisResult.fluency}</p>
                   <p><strong>Overall Feedback:</strong> {analysisResult.overallFeedback}</p>
                 </div>
               )}
