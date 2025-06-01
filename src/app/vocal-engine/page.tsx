@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { SlidersHorizontal, ListMusic, Save, PlayCircle, Settings2, Waves, ALargeSmall, Palette, Speaker, Music3 } from "lucide-react";
+import { SlidersHorizontal, ListMusic, Save, PlayCircle, Settings2, Waves, ALargeSmall, Palette, Speaker, Music3, Droplet, MoveVertical } from "lucide-react";
 import Image from "next/image";
 
 const initialPresets = [
@@ -35,12 +35,15 @@ export default function VocalEnginePage() {
   const [pitch, setPitch] = useState([0]);
   const [formants, setFormants] = useState([0]);
   const [timbre, setTimbre] = useState([0]);
-  const [ritmo, setRitmo] = useState([0]); // Nuevo: Ritmo
-  const [volumen, setVolumen] = useState([100]); // Nuevo: Volumen (0-100)
+  const [ritmo, setRitmo] = useState([0]);
+  const [volumen, setVolumen] = useState([100]);
   
   const [eqLow, setEqLow] = useState([0]);
   const [eqMid, setEqMid] = useState([0]);
   const [eqHigh, setEqHigh] = useState([0]);
+
+  const [reverb, setReverb] = useState([0]);
+  const [compression, setCompression] = useState([0]);
 
   const [realtimePreview, setRealtimePreview] = useState(true);
   const [lowLatencyMode, setLowLatencyMode] = useState(false);
@@ -60,6 +63,7 @@ export default function VocalEnginePage() {
   };
   
   const handleLoadPreset = (presetName: string) => {
+    // Placeholder for actual preset loading logic
     console.log(`Cargando preset: ${presetName}`);
   };
 
@@ -111,6 +115,19 @@ export default function VocalEnginePage() {
               <div>
                 <Label htmlFor="eq-high-slider" className="block mb-2 text-sm font-medium">Agudos: {eqHigh[0]} dB</Label>
                 <Slider id="eq-high-slider" defaultValue={eqHigh} min={-12} max={12} step={1} onValueChange={setEqHigh} />
+              </div>
+            </div>
+          </FeatureCard>
+
+          <FeatureCard title="Efectos Vocales" icon={<Settings2 className="w-6 h-6" />}>
+            <div className="space-y-6 p-4">
+              <div>
+                <Label htmlFor="reverb-slider" className="flex items-center gap-2 mb-2 text-sm font-medium"><Droplet className="w-4 h-4" />Reverb: {reverb[0]}%</Label>
+                <Slider id="reverb-slider" defaultValue={reverb} min={0} max={100} step={1} onValueChange={setReverb} />
+              </div>
+              <div>
+                <Label htmlFor="compression-slider" className="flex items-center gap-2 mb-2 text-sm font-medium"><MoveVertical className="w-4 h-4" />Compresión: {compression[0]}%</Label>
+                <Slider id="compression-slider" defaultValue={compression} min={0} max={100} step={1} onValueChange={setCompression} />
               </div>
             </div>
           </FeatureCard>
@@ -194,5 +211,3 @@ export default function VocalEnginePage() {
     </PageContainer>
   );
 }
-
-    
