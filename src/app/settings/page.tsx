@@ -2,12 +2,12 @@
 
 import { PageContainer } from "@/components/page-container";
 import { PageHeader } from "@/components/page-header";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Bell, Palette, ShieldCheck, Languages, HardDrive, Paintbrush } from "lucide-react";
+import { Bell, Palette, ShieldCheck, Languages, HardDrive, Paintbrush, Settings2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -47,24 +47,41 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
-              <Label htmlFor="dark-mode">Dark Mode</Label>
-              <Switch id="dark-mode" />
+              <Label htmlFor="dark-mode">Dark Mode (System)</Label>
+              <Switch id="dark-mode" onCheckedChange={(checked) => {
+                if (checked) document.documentElement.classList.add('dark');
+                else document.documentElement.classList.remove('dark');
+              }} />
             </div>
             <div>
-              <Label htmlFor="theme-select" className="flex items-center gap-2"><Paintbrush className="w-4 h-4" /> Application Theme</Label>
-              <Select defaultValue="default">
-                <SelectTrigger id="theme-select" className="mt-1">
+              <Label htmlFor="theme-select" className="flex items-center gap-2 mb-1"><Paintbrush className="w-4 h-4" /> Application Theme</Label>
+              <Select defaultValue="default" onValueChange={(value) => {
+                document.documentElement.classList.remove('theme-trans-affirming', 'theme-serene-focus', 'dark');
+                if (value === 'dark') {
+                  document.documentElement.classList.add('dark');
+                } else if (value !== 'default') {
+                  document.documentElement.classList.add(value);
+                }
+              }}>
+                <SelectTrigger id="theme-select">
                   <SelectValue placeholder="Select Theme" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="default">Default (Lavender)</SelectItem>
-                  <SelectItem value="dark">Dark Mode</SelectItem>
-                  <SelectItem value="trans-affirming">Trans-Affirming</SelectItem>
+                  <SelectItem value="dark">Dark Mode (Manual)</SelectItem>
+                  <SelectItem value="theme-trans-affirming">Trans-Affirming</SelectItem>
+                  <SelectItem value="theme-serene-focus">Serene Focus</SelectItem>
                 </SelectContent>
               </Select>
-               <p className="text-xs text-muted-foreground mt-1">Select 'Dark Mode' switch for system-wide dark theme.</p>
+               <p className="text-xs text-muted-foreground mt-1">Select 'Dark Mode (System)' for OS-based dark theme.</p>
             </div>
-            <p className="text-sm text-muted-foreground">Further visual adjustments will be available here.</p>
+             <div className="flex items-center justify-between pt-2">
+              <Label htmlFor="simplified-mode" className="flex flex-col">
+                <span>Simplified Mode (Beta)</span>
+                <span className="text-xs text-muted-foreground">A calmer, less distracting experience.</span>
+              </Label>
+              <Switch id="simplified-mode" />
+            </div>
           </CardContent>
         </Card>
 
@@ -78,8 +95,8 @@ export default function SettingsPage() {
               <Input id="username" defaultValue="VocalExplorer" />
             </div>
             <Button variant="outline" className="w-full">Change Password</Button>
+            <Button variant="outline" className="w-full">Manage Data & Privacy</Button>
             <Button variant="destructive" className="w-full">Delete Account</Button>
-             <p className="text-xs text-muted-foreground">Manage your data and privacy settings.</p>
           </CardContent>
         </Card>
         
@@ -88,8 +105,18 @@ export default function SettingsPage() {
             <CardTitle className="flex items-center gap-2"><Languages className="w-5 h-5" /> Language & Region</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Label htmlFor="language-select">Application Language</Label>
-            <Input id="language-select" defaultValue="English (US)" disabled />
+            <div>
+                <Label htmlFor="language-select-app">Application Language</Label>
+                <Select defaultValue="en-US">
+                    <SelectTrigger id="language-select-app" className="mt-1">
+                        <SelectValue placeholder="Select Language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="en-US">English (US)</SelectItem>
+                        <SelectItem value="es-ES" disabled>Español (Próximamente)</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
             <p className="text-sm text-muted-foreground">More languages will be supported soon.</p>
           </CardContent>
         </Card>
@@ -100,8 +127,22 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">Manage offline data, cache, and storage settings.</p>
-            <Button variant="outline" className="w-full">Manage Local Storage (Soon)</Button>
+            <Button variant="outline" className="w-full" disabled>Manage Local Cache (Soon)</Button>
             <Button variant="outline" className="w-full">Export All My Data</Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2"><Settings2 className="w-5 h-5" /> Advanced Settings</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">Configure advanced application behaviors.</p>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="dev-mode">Developer Mode</Label>
+              <Switch id="dev-mode" />
+            </div>
+            <Button variant="outline" className="w-full" disabled>Reset All Settings</Button>
           </CardContent>
         </Card>
       </div>
