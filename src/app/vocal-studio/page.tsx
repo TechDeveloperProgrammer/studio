@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -95,6 +96,7 @@ export default function VocalStudioPage() {
   const handleFileUploadedForAnalysis = (dataUri: string | string[]) => {
     if (typeof dataUri === 'string') {
       setRecordingDataUri(dataUri);
+      setAnalysisResult(null); // Clear previous analysis when new file is uploaded
       toast({ title: "File Uploaded", description: "Audio file is ready for analysis or playback." });
     }
   };
@@ -176,7 +178,7 @@ export default function VocalStudioPage() {
           <FeatureCard title="AI Analysis" icon={<Wand2 className="w-6 h-6 />}>
             <div className="p-2 space-y-4">
               <Textarea 
-                placeholder="Optional: Provide details about your goals or preferences for this recording..."
+                placeholder="Optional: Provide details about your goals or preferences for this recording (e.g., 'Practicing for a public speech', 'Trying to sound more confident')."
                 value={userDetailsForAnalysis}
                 onChange={(e) => setUserDetailsForAnalysis(e.target.value)}
                 rows={3}
@@ -186,13 +188,35 @@ export default function VocalStudioPage() {
               </Button>
               {analysisResult && (
                 <div className="mt-4 space-y-3 text-sm border p-3 rounded-md bg-muted/50">
-                  <h4 className="font-semibold">Analysis Results:</h4>
-                  <p><strong>Clarity:</strong> {analysisResult.clarity}</p>
-                  <p><strong>Emotion:</strong> {analysisResult.emotion}</p>
-                  <p><strong>Expressiveness:</strong> {analysisResult.expressiveness}</p>
-                  <p><strong>Prosody:</strong> {analysisResult.prosody}</p>
-                  <p><strong>Fluency:</strong> {analysisResult.fluency}</p>
-                  <p><strong>Overall Feedback:</strong> {analysisResult.overallFeedback}</p>
+                  <h4 className="font-semibold mb-2">Analysis Results:</h4>
+                  
+                  <div className="space-y-1">
+                    <p><strong>Clarity:</strong> {analysisResult.clarityScore}/10</p>
+                    <p className="text-xs text-muted-foreground pl-4">{analysisResult.clarity}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p><strong>Emotion:</strong> {analysisResult.emotionScore}/10</p>
+                    <p className="text-xs text-muted-foreground pl-4">{analysisResult.emotion}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p><strong>Expressiveness:</strong> {analysisResult.expressivenessScore}/10</p>
+                    <p className="text-xs text-muted-foreground pl-4">{analysisResult.expressiveness}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p><strong>Prosody:</strong> {analysisResult.prosodyScore}/10</p>
+                    <p className="text-xs text-muted-foreground pl-4">{analysisResult.prosody}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p><strong>Fluency:</strong> {analysisResult.fluencyScore}/10</p>
+                    <p className="text-xs text-muted-foreground pl-4">{analysisResult.fluency}</p>
+                  </div>
+                   <div className="space-y-1 pt-2">
+                    <p><strong>Overall Technical Score:</strong> {analysisResult.technicalScore}/10</p>
+                  </div>
+                  <div className="space-y-1 pt-2">
+                    <p><strong>Overall Feedback:</strong></p>
+                    <p className="text-xs text-muted-foreground pl-4">{analysisResult.overallFeedback}</p>
+                  </div>
                 </div>
               )}
             </div>
@@ -216,3 +240,4 @@ export default function VocalStudioPage() {
     </PageContainer>
   );
 }
+

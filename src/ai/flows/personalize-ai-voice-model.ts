@@ -1,8 +1,9 @@
+
 'use server';
 /**
- * @fileOverview A flow that personalizes the AI voice model based on user-provided examples.
+ * @fileOverview A flow that personalizes AI guidance based on user-provided voice samples and their desired voice.
  *
- * - personalizeAIVoiceModel - A function that personalizes the AI voice model.
+ * - personalizeAIVoiceModel - A function that provides personalized vocal guidance.
  * - PersonalizeAIVoiceModelInput - The input type for the personalizeAIVoiceModel function.
  * - PersonalizeAIVoiceModelOutput - The return type for the personalizeAIVoiceModel function.
  */
@@ -14,7 +15,7 @@ const PersonalizeAIVoiceModelInputSchema = z.object({
   userVoiceSamples: z
     .array(z.string())
     .describe(
-      'An array of voice samples, each as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.' // Corrected typo here
+      'An array of voice samples, each as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.'
     ),
   dreamVoiceDescription: z
     .string()
@@ -25,11 +26,18 @@ export type PersonalizeAIVoiceModelInput = z.infer<
 >;
 
 const PersonalizeAIVoiceModelOutputSchema = z.object({
-  voiceModelPersonalizationResult: z
+  toneGuidance: z
     .string()
-    .describe(
-      'A string describing the result of the voice model personalization process.'
-    ),
+    .describe('Specific advice to achieve the desired tonal qualities based on the samples and dream voice description.'),
+  clarityGuidance: z
+    .string()
+    .describe('Actionable steps to improve vocal clarity towards the goal, based on the samples and dream voice description.'),
+  emotionGuidance: z
+    .string()
+    .describe('Suggestions on how to convey desired emotions effectively, based on the samples and dream voice description.'),
+  overallSummary: z
+    .string()
+    .describe('A summary of the personalized vocal improvement plan based on the provided inputs.'),
 });
 export type PersonalizeAIVoiceModelOutput = z.infer<
   typeof PersonalizeAIVoiceModelOutputSchema
@@ -45,7 +53,24 @@ const prompt = ai.definePrompt({
   name: 'personalizeAIVoiceModelPrompt',
   input: {schema: PersonalizeAIVoiceModelInputSchema},
   output: {schema: PersonalizeAIVoiceModelOutputSchema},
-  prompt: `You are a voice modulation expert. You will analyze the user's voice samples and their description of their desired "dream voice", and provide guidance on how to adjust their voice to match the model.\n\nUser's dream voice description: {{{dreamVoiceDescription}}}\n\nUser voice samples:{{#each userVoiceSamples}} {{media url=this}} {{/each}}\n\nResult:`, // Added Handlebars each loop to process voice samples
+  prompt: `You are an expert AI vocal coach. The user wants to train their voice and has provided voice samples and a description of their "dream voice."
+
+Analyze these inputs and provide personalized guidance on how the user can adjust their:
+1.  **Tone**: Offer specific, actionable advice to help the user achieve the tonal qualities described in their "dream voice," considering their current samples. What exercises or focal points can they use?
+2.  **Clarity**: Provide actionable steps to improve vocal clarity towards their stated goal. What aspects of articulation or resonance should they focus on?
+3.  **Emotion**: Give suggestions on how to convey the desired emotions more effectively in their voice, aligning with their "dream voice" description and analyzing their current samples.
+
+Your guidance should be practical, constructive, and help the user understand what to practice.
+Finally, provide an overall summary of the personalized vocal improvement plan.
+
+User's dream voice description: {{{dreamVoiceDescription}}}
+
+User voice samples:
+{{#each userVoiceSamples}}
+- Voice Sample ({{media url=this}})
+{{/each}}
+
+Provide detailed, actionable feedback for tone, clarity, and emotion, and an overall summary.`,
 });
 
 const personalizeAIVoiceModelFlow = ai.defineFlow(

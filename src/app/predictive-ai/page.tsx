@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -74,7 +75,7 @@ export default function PredictiveAIPage() {
     try {
       const result = await personalizeAIVoiceModel({ userVoiceSamples, dreamVoiceDescription });
       setPersonalizeResult(result);
-      toast({ title: "Personalization Complete", description: "AI voice model personalization finished." });
+      toast({ title: "Personalization Complete", description: "AI voice model personalization guidance is ready." });
     } catch (error) {
       toast({ title: "Personalization Failed", description: String(error) || "An unknown error occurred.", variant: "destructive" });
     } finally {
@@ -155,8 +156,8 @@ export default function PredictiveAIPage() {
         <TabsContent value="personalize">
           <Card>
             <CardHeader>
-              <CardTitle>Personalize AI Voice Model</CardTitle>
-              <CardDescription>"Teach" the AI your desired voice with examples.</CardDescription>
+              <CardTitle>Personalize AI Voice Guidance</CardTitle>
+              <CardDescription>Get AI-driven advice based on your voice samples and desired voice.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <FileUpload 
@@ -169,7 +170,7 @@ export default function PredictiveAIPage() {
                 <Label htmlFor="dreamVoice" className="block mb-1 text-sm font-medium">Dream Voice Description</Label>
                 <Textarea
                   id="dreamVoice"
-                  placeholder="Describe your ideal voice (e.g., 'A warm, feminine voice with clear articulation')."
+                  placeholder="Describe your ideal voice (e.g., 'A warm, feminine voice with clear articulation and expressive intonation')."
                   value={dreamVoiceDescription}
                   onChange={(e) => setDreamVoiceDescription(e.target.value)}
                   rows={4}
@@ -177,12 +178,27 @@ export default function PredictiveAIPage() {
               </div>
               <Button onClick={handlePersonalize} disabled={isPersonalizing} className="w-full sm:w-auto">
                 <Sparkles className="mr-2 h-4 w-4" />
-                {isPersonalizing ? "Personalizing..." : "Personalize Model"}
+                {isPersonalizing ? "Personalizing..." : "Get Personalized Guidance"}
               </Button>
               {personalizeResult && (
-                <div className="mt-4 p-4 border rounded-md bg-muted">
-                  <h4 className="font-semibold mb-2">Personalization Result:</h4>
-                  <p className="text-sm">{personalizeResult.voiceModelPersonalizationResult}</p>
+                <div className="mt-4 p-4 border rounded-md bg-muted space-y-3">
+                  <h4 className="font-semibold mb-2">Personalized Guidance:</h4>
+                  <div>
+                    <h5 className="font-medium">Tone Guidance:</h5>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">{personalizeResult.toneGuidance}</p>
+                  </div>
+                  <div>
+                    <h5 className="font-medium">Clarity Guidance:</h5>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">{personalizeResult.clarityGuidance}</p>
+                  </div>
+                  <div>
+                    <h5 className="font-medium">Emotion Guidance:</h5>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">{personalizeResult.emotionGuidance}</p>
+                  </div>
+                   <div>
+                    <h5 className="font-medium">Overall Summary:</h5>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">{personalizeResult.overallSummary}</p>
+                  </div>
                 </div>
               )}
             </CardContent>
@@ -193,7 +209,7 @@ export default function PredictiveAIPage() {
           <Card>
             <CardHeader>
               <CardTitle>Analyze Vocal Performance</CardTitle>
-              <CardDescription>Get feedback on clarity, emotion, and expressiveness.</CardDescription>
+              <CardDescription>Get detailed feedback including scores on clarity, emotion, and more.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <FileUpload 
@@ -205,7 +221,7 @@ export default function PredictiveAIPage() {
                 <Label htmlFor="userDetails" className="block mb-1 text-sm font-medium">User Details (Optional)</Label>
                 <Textarea
                   id="userDetails"
-                  placeholder="Any relevant background, goals, or preferences (e.g., 'Practicing for a public speech')."
+                  placeholder="Any relevant background, goals, or preferences (e.g., 'Practicing for a public speech', 'Trying to sound more confident')."
                   value={performanceUserDetails}
                   onChange={(e) => setPerformanceUserDetails(e.target.value)}
                   rows={3}
@@ -216,12 +232,35 @@ export default function PredictiveAIPage() {
                 {isAnalyzing ? "Analyzing..." : "Analyze Performance"}
               </Button>
               {analysisResult && (
-                <div className="mt-4 p-4 border rounded-md bg-muted space-y-2">
-                  <h4 className="font-semibold">Analysis Results:</h4>
-                  <p><strong>Clarity:</strong> {analysisResult.clarity}</p>
-                  <p><strong>Emotion:</strong> {analysisResult.emotion}</p>
-                  <p><strong>Expressiveness:</strong> {analysisResult.expressiveness}</p>
-                  <p><strong>Overall Feedback:</strong> {analysisResult.overallFeedback}</p>
+                 <div className="mt-4 p-4 border rounded-md bg-muted space-y-3 text-sm">
+                  <h4 className="font-semibold mb-2">Analysis Results:</h4>
+                  <div className="space-y-1">
+                    <p><strong>Clarity:</strong> {analysisResult.clarityScore}/10</p>
+                    <p className="text-xs text-muted-foreground pl-4 whitespace-pre-wrap">{analysisResult.clarity}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p><strong>Emotion:</strong> {analysisResult.emotionScore}/10</p>
+                    <p className="text-xs text-muted-foreground pl-4 whitespace-pre-wrap">{analysisResult.emotion}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p><strong>Expressiveness:</strong> {analysisResult.expressivenessScore}/10</p>
+                    <p className="text-xs text-muted-foreground pl-4 whitespace-pre-wrap">{analysisResult.expressiveness}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p><strong>Prosody:</strong> {analysisResult.prosodyScore}/10</p>
+                    <p className="text-xs text-muted-foreground pl-4 whitespace-pre-wrap">{analysisResult.prosody}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p><strong>Fluency:</strong> {analysisResult.fluencyScore}/10</p>
+                    <p className="text-xs text-muted-foreground pl-4 whitespace-pre-wrap">{analysisResult.fluency}</p>
+                  </div>
+                   <div className="space-y-1 pt-2">
+                    <p><strong>Overall Technical Score:</strong> {analysisResult.technicalScore}/10</p>
+                  </div>
+                  <div className="space-y-1 pt-2">
+                    <p><strong>Overall Feedback:</strong></p>
+                    <p className="text-xs text-muted-foreground pl-4 whitespace-pre-wrap">{analysisResult.overallFeedback}</p>
+                  </div>
                 </div>
               )}
             </CardContent>
@@ -297,7 +336,7 @@ export default function PredictiveAIPage() {
               {adjustmentSuggestion && (
                 <div className="mt-4 p-4 border rounded-md bg-muted">
                   <h4 className="font-semibold mb-2">Suggested Adjustments:</h4>
-                  <p className="text-sm">{adjustmentSuggestion.suggestedAdjustments}</p>
+                  <p className="text-sm whitespace-pre-wrap">{adjustmentSuggestion.suggestedAdjustments}</p>
                 </div>
               )}
             </CardContent>
@@ -308,3 +347,4 @@ export default function PredictiveAIPage() {
     </PageContainer>
   );
 }
+
