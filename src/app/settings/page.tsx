@@ -7,7 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Bell, Palette, ShieldCheck, Languages, HardDrive } from "lucide-react";
+import { Bell, Palette, ShieldCheck, Languages, HardDrive, Paintbrush } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function SettingsPage() {
   return (
@@ -43,8 +50,21 @@ export default function SettingsPage() {
               <Label htmlFor="dark-mode">Dark Mode</Label>
               <Switch id="dark-mode" />
             </div>
-            <p className="text-sm text-muted-foreground">Theme selection and visual adjustments will be available here.</p>
-            <Button variant="outline" className="w-full">Customize Theme (Soon)</Button>
+            <div>
+              <Label htmlFor="theme-select" className="flex items-center gap-2"><Paintbrush className="w-4 h-4" /> Application Theme</Label>
+              <Select defaultValue="default">
+                <SelectTrigger id="theme-select" className="mt-1">
+                  <SelectValue placeholder="Select Theme" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="default">Default (Lavender)</SelectItem>
+                  <SelectItem value="dark">Dark Mode</SelectItem>
+                  <SelectItem value="trans-affirming">Trans-Affirming</SelectItem>
+                </SelectContent>
+              </Select>
+               <p className="text-xs text-muted-foreground mt-1">Select 'Dark Mode' switch for system-wide dark theme.</p>
+            </div>
+            <p className="text-sm text-muted-foreground">Further visual adjustments will be available here.</p>
           </CardContent>
         </Card>
 
