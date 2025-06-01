@@ -21,8 +21,6 @@ Puedes enviar propuestas, pull requests, recursos o ideas directamente por los c
 
 ---
 
-🌐 English:
-
 > Open Collaboration — Nexus Vocality
 
 You're welcome to collaborate with Nexus Vocality! This project is open to creative, technical, and supportive contributions — no direct permission from the creator is required.
